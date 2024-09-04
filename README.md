@@ -10,7 +10,7 @@
 
     Install packages in the NextJs project
     ```
-    $ cd nextjs && npm install
+    $ cd reactjs && npm install
     ```
 
 #### Run docker

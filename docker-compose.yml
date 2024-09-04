@@ -1,7 +1,7 @@
 services:
   # Add MongoDB service
   mongodb:
-    container_name: gifts-mongodb
+    container_name: gifts-v1_mongodb
     build: 
       context: .
       dockerfile: .docker/mongodb/Dockerfile
@@ -19,7 +19,7 @@ services:
       # docker exec -it gifts-mongodb mongo -u root -p giftsmongodb --authenticationDatabase admin
 
   nextjs:
-    container_name: gifts-nextjs
+    container_name: gifts-v1_reactjs
     build:
       context: .
       # Path to the Dockerfile inside .docker/next directory
@@ -39,7 +39,7 @@ services:
   # Add more services here
   # Create new service for nestjs based on Dockerfile in .docker/nest directory
   nestjs:
-    container_name: gifts-nestjs
+    container_name: gifts-v1_nestjs
     build:
       context: .
       dockerfile: .docker/nest/Dockerfile
@@ -55,7 +55,7 @@ services:
 
   # Add Nginx service
   nginx:
-    container_name: gifts-nginx
+    container_name: gifts-v1_nginx
     build:
       context: .
       dockerfile: .docker/nginx/Dockerfile

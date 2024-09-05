@@ -4,11 +4,11 @@ WORKDIR /app
 
 RUN apk add vim
 
-COPY ../../reactjs/package.json ./
+COPY ../../nextjs/package.json ./
 
 RUN npm install
 
-COPY ../../reactjs .
+COPY ../../nextjs .
 
 RUN npm run build
 

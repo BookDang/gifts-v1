@@ -15,11 +15,11 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: giftsmongodb
-      MONGO_INITDB_DATABASE: giftsdb
+      MONGO_INITDB_DATABASE: giftsdb_v1
       # docker exec -it gifts-mongodb mongo -u root -p giftsmongodb --authenticationDatabase admin
 
   nextjs:
-    container_name: gifts-v1_reactjs
+    container_name: gifts-v1_nextjs
     build:
       context: .
       # Path to the Dockerfile inside .docker/next directory

@@ -15,7 +15,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: giftsmongodb
-      MONGO_INITDB_DATABASE: giftsdb
+      MONGO_INITDB_DATABASE: giftsdb_v1
       # docker exec -it gifts-mongodb mongo -u root -p giftsmongodb --authenticationDatabase admin
 
   nextjs:

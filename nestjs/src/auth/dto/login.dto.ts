@@ -1,24 +1,15 @@
-import { Gender } from 'utilities/enums/user.enum'
 import {
-  IsEmail,
-  IsEnum,
-  IsNotEmpty,
   IsString,
-  Matches,
-  MaxLength,
+  IsNotEmpty,
   MinLength,
-  Validate,
+  MaxLength,
+  Matches,
 } from 'class-validator'
-import { UserExistsConstraint } from '@/users/validators/user-exists.decorator'
 
-export class CreateUserDto {
+export class LoginDto {
   @IsString()
   @MinLength(6)
   @MaxLength(20)
-  @IsNotEmpty()
-  @Validate(UserExistsConstraint, ['username'], {
-    message: 'Username already exists',
-  })
   username: string
 
   @IsString()
@@ -33,13 +24,4 @@ export class CreateUserDto {
     },
   )
   password: string
-
-  @IsString()
-  @IsNotEmpty()
-  @IsEnum(Gender)
-  gender: Gender
-
-  @IsString()
-  @IsEmail()
-  email: string
 }

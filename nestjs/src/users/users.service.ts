@@ -49,6 +49,10 @@ export class UsersService {
     }
   }
 
+  async findOneByUsername(username: string): Promise<User | null> {
+    return this.userModel.findOne({ username })
+  }
+
   findAll() {
     return `This action returns all users`
   }

@@ -3,18 +3,50 @@
 import React from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { TextField, Button, Box, Typography, Link } from '@mui/material'
-
-interface LoginFormInputs {
-  username: string
-  password: string
-}
+import LoginService from '@/services/login.service'
+import { TLogin } from '@/types/login.type'
+import GSnackbar from '@/app/components/common/GSnackbar'
 
 export default function LoginPage() {
-  const { control, handleSubmit } = useForm<LoginFormInputs>()
+  const { control, handleSubmit } = useForm<TLogin>()
+  const loginService = new LoginService()
+  const [snackbar, setSnackbar] = React.useState({
+    open: false,
+    message: '',
+    severity: 'error' as 'error' | 'success' | 'info' | 'warning',
+  })
 
-  const onSubmit = (data: LoginFormInputs) => {
-    console.log(data)
-    // Xử lý đăng nhập ở đây
+  const onSubmit = async (data: TLogin) => {
+    try {
+      const response = await loginService.login(data)
+      if (response.status === 200) {
+        setSnackbar({
+          open: true,
+          message: response.data.message,
+          severity: 'success',
+        })
+      } else {
+        setSnackbar({
+          open: true,
+          message: response.data.message,
+          severity: 'error',
+        })
+      }
+    } catch (err) {
+      setSnackbar({
+        open: true,
+        message: 'Invalid username or password',
+        severity: 'error',
+      })
+    }
+  }
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({
+      open: false,
+      message: '',
+      severity: 'error',
+    })
   }
 
   return (
@@ -78,6 +110,13 @@ export default function LoginPage() {
           </Typography>
         </Box>
       </Box>
+      <GSnackbar
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        onClose={handleCloseSnackbar}
+        autoHideDuration={6000}
+      />
     </Box>
   )
 }

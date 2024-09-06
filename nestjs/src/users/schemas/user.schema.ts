@@ -1,8 +1,7 @@
 import { Gender } from 'utilities/enums/user.enum'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { HydratedDocument } from 'mongoose'
-
-export type UserDocument = HydratedDocument<User>
+import { Exclude } from 'class-transformer'
 
 @Schema()
 export class User {
@@ -16,6 +15,7 @@ export class User {
   email: string
 
   @Prop({ required: true })
+  @Exclude()
   password: string
 
   @Prop({ required: true })
@@ -30,6 +30,8 @@ export class User {
   @Prop()
   deletedAt: Date | null
 }
+
+export type UserDocument = HydratedDocument<User>
 
 export const UserSchema = SchemaFactory.createForClass(User)
 

@@ -13,14 +13,24 @@ import { AuthService } from './auth.service'
 import { CreateAuthDto } from './dto/create-auth.dto'
 import { UpdateAuthDto } from './dto/update-auth.dto'
 import { LoginDto } from '@/auth/dto/login.dto'
+import { TResponse } from 'utilities/types/responses.type'
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  login(@Body() loginDto: LoginDto, @Res() res: Response) {
-    return this.authService.login(loginDto)
+  async login(@Body() loginDto: LoginDto, @Res() res: Response) {
+    const response: TResponse<string> = await this.authService.login(loginDto)
+    if (response.status === 200 && response.data) {
+      res.cookie('access_token', response.data, {
+        httpOnly: true,
+        // secure: process.env.NODE_ENV === 'production',
+        expires: new Date(Date.now() + 180 * 1000),
+        sameSite: 'strict',
+      })
+    }
+    return res.status(response.status).json(response)
   }
 
   @Post()

@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import * as bcrypt from 'bcrypt'
-import { User } from '@/users/schemas/user.schema'
+import { User, UserDocument } from '@/users/schemas/user.schema'
 import { Model } from 'mongoose'
 import { TResponse } from 'utilities/types/responses.type'
 import { SALT_ROUNDS } from 'utilities/constants/user.constants'
@@ -14,7 +14,7 @@ export class UsersService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<TResponse> {
+  async create(createUserDto: CreateUserDto): Promise<TResponse<any>> {
     try {
       const existingUser = await this.userModel.findOne({
         email: createUserDto.email,
@@ -25,21 +25,25 @@ export class UsersService {
           status: HttpStatus.CONFLICT,
         }
       }
-      const hashedPassword = await bcrypt.hash(createUserDto.password, SALT_ROUNDS)
+      const hashedPassword = await bcrypt.hash(
+        createUserDto.password,
+        SALT_ROUNDS,
+      )
       const user = await this.userModel.create({
         ...createUserDto,
         password: hashedPassword,
       })
+
       if (!user) {
         return {
           message: 'User not created',
           status: HttpStatus.BAD_REQUEST,
         }
       }
+
       return {
         message: 'User created successfully',
-        status: HttpStatus.CREATED,
-        data: user,
+        status: HttpStatus.NO_CONTENT,
       }
     } catch (error) {
       return {
@@ -49,7 +53,7 @@ export class UsersService {
     }
   }
 
-  async findOneByUsername(username: string): Promise<User | null> {
+  async findOneByUsername(username: string): Promise<UserDocument | null> {
     return this.userModel.findOne({ username })
   }
 

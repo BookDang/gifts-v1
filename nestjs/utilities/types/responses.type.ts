@@ -1,5 +1,5 @@
-export type TResponse = {
+export type TResponse<T> = {
   message: string
   status: number
-  data?: any
+  data?: T
 }

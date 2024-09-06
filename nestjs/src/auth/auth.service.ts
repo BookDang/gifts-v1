@@ -4,14 +4,20 @@ import { CreateAuthDto } from './dto/create-auth.dto'
 import { UpdateAuthDto } from './dto/update-auth.dto'
 import { UsersService } from '@/users/users.service'
 import { LoginDto } from '@/auth/dto/login.dto'
-import { User } from '@/users/schemas/user.schema'
+import { JwtService } from '@nestjs/jwt'
+import { UserDocument } from '@/users/schemas/user.schema'
+import { TResponse } from 'utilities/types/responses.type'
+import { JWT_EXPIRES_IN } from 'utilities/constants/user.constants'
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userService: UsersService) {}
+  constructor(
+    private readonly userService: UsersService,
+    private jwtService: JwtService,
+  ) {}
 
-  async login(loginDto: LoginDto) {
-    const user: User | null = await this.userService.findOneByUsername(
+  async login(loginDto: LoginDto): Promise<TResponse<string>> {
+    const user: UserDocument | null = await this.userService.findOneByUsername(
       loginDto.username,
     )
     if (!user) {
@@ -27,6 +33,21 @@ export class AuthService {
         message: 'Invalid password',
         status: HttpStatus.UNAUTHORIZED,
       }
+    }
+
+    const payload = {
+      id: user._id,
+      username: user.username,
+    }
+
+    const access_token = await this.jwtService.signAsync(payload, {
+      expiresIn: JWT_EXPIRES_IN,
+    })
+
+    return {
+      message: 'Login successful',
+      status: HttpStatus.OK,
+      data: access_token,
     }
   }
 

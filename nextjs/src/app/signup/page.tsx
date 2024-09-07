@@ -5,7 +5,6 @@ import { useForm, Controller } from 'react-hook-form'
 import {
   TextField,
   Button,
-  Select,
   MenuItem,
   Typography,
   Box,
@@ -21,7 +20,7 @@ import GSnackbar from '@/app/_components/common/GSnackbar'
 
 type TFormData = TUser
 
-const CreateAccount = () => {
+const SignUp = () => {
   const {
     control,
     handleSubmit,
@@ -76,7 +75,7 @@ const CreateAccount = () => {
   }))
 
   return (
-    <Box className="flex items-center justify-center min-h-screen">
+    <Box className="flex items-center justify-center min-h-[calc(100vh_-_5rem)]">
       <GlassBox className="p-8 w-96">
         <Typography variant="h4" className="text-center mb-6 !text-gray-600">
           Create Account
@@ -271,10 +270,9 @@ const CreateAccount = () => {
         message={gSnackbarMessage}
         severity={gSnackbarSeverity}
         onClose={() => setOpenGSnackbar(false)}
-        resetMessage={() => setGSnackbarMessage('')}
       />
     </Box>
   )
 }
 
-export default CreateAccount
+export default SignUp

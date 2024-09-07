@@ -104,7 +104,7 @@ export default function LoginPage() {
         <Box className="mt-2 text-center">
           <Typography variant="body2" className="text-gray-600">
             Don't have an account?{' '}
-            <Link href="#" className="text-blue-500 hover:underline">
+            <Link href="/signup" className="text-blue-500 hover:underline">
               Sign up
             </Link>
           </Typography>

@@ -6,7 +6,6 @@ type GSnackbarProps = {
   message: string | string[]
   severity?: AlertProps['severity']
   onClose: () => void
-  resetMessage: () => void
   autoHideDuration?: number
 }
 

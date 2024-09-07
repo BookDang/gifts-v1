@@ -1,4 +1,4 @@
-import { TLogin } from '@/types/login.type'
+import { TLogin } from '@/utilities/types/login.type'
 import axios, { AxiosResponse } from 'axios'
 
 class LoginService  {

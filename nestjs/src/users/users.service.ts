@@ -16,12 +16,28 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto): Promise<TResponse<any>> {
     try {
-      const existingUser = await this.userModel.findOne({
-        email: createUserDto.email,
-      })
+      let filter: any = {}
+      if (createUserDto.email) {
+        filter.email = createUserDto.email
+      }
+      if (createUserDto.username) {
+        filter.username = createUserDto.username
+      }
+
+      let existingUser = null
+      if (filter.email && filter.username) {
+        existingUser = await this.userModel.findOne({
+          $or: [{ email: filter.email }, { username: filter.username }],
+        })
+      } else if (filter.email) {
+        existingUser = await this.userModel.findOne({ email: filter.email })
+      } else if (filter.username) {
+        existingUser = await this.userModel.findOne({ username: filter.username })
+      }
+
       if (existingUser) {
         return {
-          message: 'Email already exists',
+          message: 'Email or username already exists',
           status: HttpStatus.CONFLICT,
         }
       }
@@ -40,10 +56,10 @@ export class UsersService {
           status: HttpStatus.BAD_REQUEST,
         }
       }
-
       return {
         message: 'User created successfully',
-        status: HttpStatus.NO_CONTENT,
+        status: HttpStatus.CREATED,
+        data: user,
       }
     } catch (error) {
       return {

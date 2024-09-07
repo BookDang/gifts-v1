@@ -4,8 +4,8 @@ import React from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { TextField, Button, Box, Typography, Link } from '@mui/material'
 import LoginService from '@/services/login.service'
-import { TLogin } from '@/types/login.type'
-import GSnackbar from '@/app/components/common/GSnackbar'
+import { TLogin } from '@/utilities/types/login.type'
+import GSnackbar from '@/app/_components/common/GSnackbar'
 
 export default function LoginPage() {
   const { control, handleSubmit } = useForm<TLogin>()
@@ -50,9 +50,9 @@ export default function LoginPage() {
   }
 
   return (
-    <Box className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-400">
+    <Box className="flex items-center justify-center min-h-screen">
       <Box className="bg-white p-8 rounded-lg shadow-md w-96">
-        <Typography variant="h4" className="text-center mb-6">
+        <Typography variant="h4" className="text-center mb-6 !text-gray-600">
           Login
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>

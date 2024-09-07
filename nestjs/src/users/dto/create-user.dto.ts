@@ -8,17 +8,17 @@ import {
   MaxLength,
   MinLength,
   Validate,
+  ValidateIf,
 } from 'class-validator'
-import { UserExistsConstraint } from '@/users/validators/user-exists.decorator'
+import { IsUserExistsConstraint } from '@/users/validators/user-exists.decorator'
+import { IsEmailExistsConstraint } from '@/users/validators/email-exists.decorator'
 
 export class CreateUserDto {
   @IsString()
   @MinLength(6)
   @MaxLength(20)
   @IsNotEmpty()
-  @Validate(UserExistsConstraint, ['username'], {
-    message: 'Username already exists',
-  })
+  @Validate(IsUserExistsConstraint, ['username'])
   username: string
 
   @IsString()
@@ -40,6 +40,7 @@ export class CreateUserDto {
   gender: Gender
 
   @IsString()
-  @IsEmail()
+  @Validate(IsEmailExistsConstraint, ['email'])
+  @IsEmail({}, { message: 'Email is not valid' })
   email: string
 }

@@ -22,15 +22,27 @@ export class AuthController {
   @Post('login')
   async login(@Body() loginDto: LoginDto, @Res() res: Response) {
     const response: TResponse<string> = await this.authService.login(loginDto)
+    const dateNow = Date.now()
+    const expires = new Date(dateNow + 180 * 1000)
     if (response.status === 200 && response.data) {
       res.cookie('access_token', response.data, {
         httpOnly: true,
         // secure: process.env.NODE_ENV === 'production',
-        expires: new Date(Date.now() + 180 * 1000),
+        expires,
         sameSite: 'strict',
       })
     }
-    return res.status(response.status).json(response)
+    console.log('expires', dateNow + 180 * 1000, dateNow)
+    const newResponse = {
+      message: response.message || '',
+      dateNow,
+      access_token: response.data,
+      status: response.status,
+      data: {
+        access_token: response.data,
+      },
+    }
+    return res.status(response.status).json(newResponse)
   }
 
   @Post()

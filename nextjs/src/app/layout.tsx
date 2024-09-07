@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
-import NavPage from '@/app/_components/nav/page'
+import NavPage from '@/app/_components/layout/nav/page'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -35,8 +35,14 @@ export default function RootLayout({
           pb-4
         `}
       >
-        <NavPage />
-        {children}
+        <header>
+          <NavPage />
+        </header>
+        <main className="min-h-[calc(100vh_-_100px)]">{children}</main>
+        <footer className="text-center text-gray-500 text-sm">
+          &copy; {new Date().getFullYear()} Your Company Name. All rights
+          reserved.
+        </footer>
       </body>
     </html>
   )

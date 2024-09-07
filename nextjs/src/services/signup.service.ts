@@ -1,18 +1,18 @@
 import axios, { AxiosResponse } from 'axios'
 import { TUser } from '@/utilities/types/user.type'
 
-interface ICreateAccountResponse {
+interface ISignupResponse {
   message: string
   status: number
   data: any
 }
 
-class CreateAccountService {
-  async createAccount(
+class SignupService {
+  async signup(
     data: TUser,
-  ): Promise<AxiosResponse<ICreateAccountResponse>> {
+  ): Promise<AxiosResponse<ISignupResponse>> {
     try {
-      const response = await axios.post<ICreateAccountResponse>(
+      const response = await axios.post<ISignupResponse>(
         '/api/users',
         data,
       )
@@ -23,4 +23,4 @@ class CreateAccountService {
   }
 }
 
-export default CreateAccountService
+export default SignupService

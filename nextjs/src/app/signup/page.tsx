@@ -1,32 +1,28 @@
 'use client'
 
 import React from 'react'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm, Controller, FormProvider } from 'react-hook-form'
 import {
   TextField,
   Button,
   MenuItem,
   Typography,
   Box,
-  Tooltip,
   styled,
   AlertProps,
 } from '@mui/material'
-import InfoIcon from '@mui/icons-material/Info'
 import { TUser } from '@/utilities/types/user.type'
-import CreateAccountService from '@/services/create_account.service'
+import SignupService from '@/services/signup.service'
 import { Gender } from '@/utilities/enums/user.enum'
 import GSnackbar from '@/app/_components/common/GSnackbar'
+import UserRules from '@/utilities/rules/user.rule'
+import GPasswordField from '@/app/_components/user/form/GPasswordField'
+import GUsernameField from '@/app/_components/user/form/GUsernameField'
 
 type TFormData = TUser
 
 const SignUp = () => {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<TFormData>({
+  const methods = useForm<TFormData>({
     defaultValues: {
       name: '',
       username: '',
@@ -37,17 +33,22 @@ const SignUp = () => {
     reValidateMode: 'onBlur',
   })
 
+  const {
+    control,
+    formState: { errors },
+    reset,
+  } = methods
+
   const [openGSnackbar, setOpenGSnackbar] = React.useState<boolean>(false)
   const [gSnackbarMessage, setGSnackbarMessage] = React.useState<string>('')
   const [gSnackbarSeverity, setGSnackbarSeverity] =
     React.useState<AlertProps['severity']>('success')
 
-  const createAccountService = new CreateAccountService()
+  const signupService = new SignupService()
 
   const onSubmit = async (data: TFormData) => {
-    console.log(data)
-    createAccountService
-      .createAccount(data)
+    signupService
+      .signup(data)
       .then((response) => {
         if (response.status >= 200 && response.status < 300) {
           setGSnackbarMessage(response.data.message)
@@ -75,195 +76,95 @@ const SignUp = () => {
   }))
 
   return (
-    <Box className="flex items-center justify-center min-h-[calc(100vh_-_5rem)]">
+    <Box className="flex items-center justify-center min-h-[calc(100vh_-_6.5rem)]">
       <GlassBox className="p-8 w-96">
         <Typography variant="h4" className="text-center mb-6 !text-gray-600">
           Create Account
         </Typography>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <Controller
-            name="name"
-            control={control}
-            rules={{
-              required: 'Name is required',
-            }}
-            render={({ field }) => (
-              <div className="!mt-3">
-                <label className="!text-gray-600">
-                  Name <span className="text-red-500">*</span>
-                </label>
-                <TextField
-                  {...field}
-                  size="small"
-                  className="!mt-1"
-                  fullWidth
-                  error={!!errors.name}
-                  helperText={errors.name?.message}
-                />
-              </div>
-            )}
-          />
-
-          <Controller
-            name="username"
-            control={control}
-            rules={{
-              required: 'Username is required',
-              minLength: {
-                value: 6,
-                message: 'Username must be at least 6 characters',
-              },
-              maxLength: {
-                value: 30,
-                message: 'Username must be at most 30 characters',
-              },
-            }}
-            render={({ field }) => (
-              <div className="!mt-3">
-                <div className="flex items-center justify-between">
+        <FormProvider {...methods}>
+          <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-4">
+            <Controller
+              name="name"
+              control={control}
+              rules={{
+                required: 'Name is required',
+              }}
+              render={({ field }) => (
+                <div className="!mt-3">
                   <label className="!text-gray-600">
-                    Username <span className="text-red-500">*</span>
+                    Name <span className="text-red-500">*</span>
                   </label>
-                  <Tooltip
-                    title={
-                      <div>
-                        <p>Username must contain at least:</p>
-                        <p> - 6 characters, maximum 20 characters</p>
-                      </div>
-                    }
-                    arrow
-                  >
-                    <InfoIcon
-                      fontSize="small"
-                      className="ml-1 text-gray-400 cursor-help"
-                    />
-                  </Tooltip>
+                  <TextField
+                    {...field}
+                    size="small"
+                    className="!mt-1"
+                    fullWidth
+                    error={!!errors.name}
+                    helperText={errors.name?.message}
+                  />
                 </div>
-                <TextField
-                  {...field}
-                  size="small"
-                  className="!mt-1"
-                  fullWidth
-                  error={!!errors.username}
-                  helperText={errors.username?.message}
-                />
-              </div>
-            )}
-          />
+              )}
+            />
 
-          <Controller
-            name="email"
-            control={control}
-            rules={{
-              pattern: { value: /^\S+@\S+$/i, message: 'Invalid email' },
-            }}
-            render={({ field }) => (
-              <div className="!mt-3">
-                <label className="!text-gray-600">Email</label>
-                <TextField
-                  {...field}
-                  size="small"
-                  className="!mt-1"
-                  fullWidth
-                  error={!!errors.email}
-                  helperText={errors.email?.message}
-                />
-              </div>
-            )}
-          />
+            <GUsernameField name="username" rules={UserRules.username} />
 
-          <Controller
-            name="password"
-            control={control}
-            rules={{
-              required: 'Password is required',
-              minLength: {
-                value: 6,
-                message: 'Password must be at least 6 characters',
-              },
-              maxLength: {
-                value: 30,
-                message: 'Password must be at most 12 characters',
-              },
-              pattern: {
-                value:
-                  /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,30}$/,
-                message:
-                  'Password must contain at least 6 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character',
-              },
-            }}
-            render={({ field }) => (
-              <div className="!mt-3">
-                <div className="flex items-center justify-between">
-                  <label className="!text-gray-600">
-                    Password <span className="text-red-500">*</span>
-                  </label>
-
-                  <Tooltip
-                    title={
-                      <div>
-                        <p>Password must contain at least:</p>
-                        <p> - 6 characters, maximum 30 characters</p>
-                        <p> - 1 lowercase letter</p>
-                        <p> - 1 uppercase letter</p>
-                        <p> - 1 special character</p>
-                        <p> - 1 number</p>
-                      </div>
-                    }
-                    arrow
-                  >
-                    <InfoIcon
-                      fontSize="small"
-                      className="ml-1 text-gray-400 cursor-help"
-                    />
-                  </Tooltip>
+            <Controller
+              name="email"
+              control={control}
+              rules={{
+                pattern: { value: /^\S+@\S+$/i, message: 'Invalid email' },
+              }}
+              render={({ field }) => (
+                <div className="!mt-3">
+                  <label className="!text-gray-600">Email</label>
+                  <TextField
+                    {...field}
+                    size="small"
+                    className="!mt-1"
+                    fullWidth
+                    error={!!errors.email}
+                    helperText={errors.email?.message}
+                  />
                 </div>
-                <TextField
-                  {...field}
-                  size="small"
-                  type="password"
-                  className="!mt-1"
-                  fullWidth
-                  error={!!errors.password}
-                  helperText={errors.password?.message}
-                />
-              </div>
-            )}
-          />
+              )}
+            />
 
-          <Controller
-            name="gender"
-            control={control}
-            rules={{ required: 'Gender is required' }}
-            render={({ field }) => (
-              <div className="!mt-3">
-                <p className="!text-gray-600 !mb-1">
-                  Gender <span className="text-red-500">*</span>
-                </p>
-                <TextField
-                  {...field}
-                  fullWidth
-                  select
-                  size="small"
-                  error={!!errors.gender}
-                  helperText={errors.gender?.message}
-                >
-                  <MenuItem value="male">Male</MenuItem>
-                  <MenuItem value="female">Female</MenuItem>
-                  <MenuItem value="other">Other</MenuItem>
-                </TextField>
-              </div>
-            )}
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            className="w-full !mt-8"
-          >
-            Create Account
-          </Button>
-        </form>
+            <GPasswordField name="password" rules={UserRules.password} />
+
+            <Controller
+              name="gender"
+              control={control}
+              rules={{ required: 'Gender is required' }}
+              render={({ field }) => (
+                <div className="!mt-3">
+                  <p className="!text-gray-600 !mb-1">
+                    Gender <span className="text-red-500">*</span>
+                  </p>
+                  <TextField
+                    {...field}
+                    fullWidth
+                    select
+                    size="small"
+                    error={!!errors.gender}
+                    helperText={errors.gender?.message}
+                  >
+                    <MenuItem value="male">Male</MenuItem>
+                    <MenuItem value="female">Female</MenuItem>
+                    <MenuItem value="other">Other</MenuItem>
+                  </TextField>
+                </div>
+              )}
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              className="w-full !mt-8"
+            >
+              Create Account
+            </Button>
+          </form>
+        </FormProvider>
       </GlassBox>
       <GSnackbar
         open={openGSnackbar}

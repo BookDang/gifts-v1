@@ -1,14 +1,24 @@
 'use client'
 
+import React from 'react'
 import Link from 'next/link'
+import Cookies from 'js-cookie'
+import { usePathname } from 'next/navigation'
 
-const navData = [
-  {
-    name: 'Log In',
-    href: '/login',
-  },
-]
 const NavPage = () => {
+  const pathname = usePathname()
+  const [cookieValue, setCookieValue] = React.useState<string | undefined>(
+    Cookies.get('access_token'),
+  )
+
+  React.useEffect(() => {
+    const newValue = Cookies.get('client_access_token')
+    console.log('pathname', pathname)
+    console.log('newValue', newValue)
+    setCookieValue(newValue)
+    return () => {}
+  }, [Cookies.get('client_access_token'), pathname])
+
   return (
     <nav
       className="py-4 sticky top-0 left-0 w-full z-50"
@@ -30,15 +40,12 @@ const NavPage = () => {
             </Link>
           </div>
           <div className="flex items-center gap-4">
-            {navData.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="text-white font-medium hover:border-b hover:border-white"
-              >
-                {item.name}
-              </Link>
-            ))}
+            <Link
+              href={cookieValue ? '/logout' : '/login'}
+              className="text-white font-medium hover:border-b hover:border-white"
+            >
+              {cookieValue ? 'Logout' : 'Login'}
+            </Link>
           </div>
         </div>
       </div>

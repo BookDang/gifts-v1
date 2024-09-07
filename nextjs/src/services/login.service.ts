@@ -5,7 +5,7 @@ class LoginService  {
   async login(credentials: TLogin): Promise<AxiosResponse> {
     try {
       const response = await axios.post<AxiosResponse>(
-        '/api/login',
+        '/api/auth/login',
         credentials,
       )
       return response
@@ -16,7 +16,7 @@ class LoginService  {
 
   async logout(): Promise<void> {
     try {
-      await axios.post('/api/logout')
+      await axios.post('/api/auth/logout')
     } catch (error) {
       throw error
     }

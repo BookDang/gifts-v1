@@ -1,14 +1,28 @@
 'use client'
 
 import React from 'react'
-import { useForm, Controller } from 'react-hook-form'
-import { TextField, Button, Box, Typography, Link } from '@mui/material'
+import { useForm, FormProvider } from 'react-hook-form'
+import { Button, Box, Typography, Link } from '@mui/material'
+import { useRouter } from 'next/navigation'
+import moment from 'moment'
+import Cookies from 'js-cookie'
 import LoginService from '@/services/login.service'
 import { TLogin } from '@/utilities/types/login.type'
 import GSnackbar from '@/app/_components/common/GSnackbar'
+import UserRules from '@/utilities/rules/user.rule'
+import GUsernameField from '@/app/_components/user/form/GUsernameField'
+import GPasswordField from '@/app/_components/user/form/GPasswordField'
 
 export default function LoginPage() {
-  const { control, handleSubmit } = useForm<TLogin>()
+  const router = useRouter()
+
+  const methods = useForm({
+    defaultValues: {
+      username: '',
+      password: '',
+    },
+  })
+
   const loginService = new LoginService()
   const [snackbar, setSnackbar] = React.useState({
     open: false,
@@ -22,20 +36,28 @@ export default function LoginPage() {
       if (response.status === 200) {
         setSnackbar({
           open: true,
-          message: response.data.message,
+          message: response.data?.message,
           severity: 'success',
         })
+        const dateNow = response.data.dateNow
+        const expires: number = dateNow + 180 * 1000
+        Cookies.set('client_access_token', 'isLogined', {
+          expires,
+          sameSite: 'strict',
+        })
+        router.push('/')
       } else {
         setSnackbar({
           open: true,
-          message: response.data.message,
+          message: response.data?.message,
           severity: 'error',
         })
       }
-    } catch (err) {
+    } catch (err: any) {
+      console.log('err', err)
       setSnackbar({
         open: true,
-        message: 'Invalid username or password',
+        message: err.response?.data?.message || 'Something went wrong',
         severity: 'error',
       })
     }
@@ -50,52 +72,25 @@ export default function LoginPage() {
   }
 
   return (
-    <Box className="flex items-center justify-center min-h-screen">
+    <Box className="flex items-center justify-center min-h-[calc(100vh_-_6.5rem)]">
       <Box className="bg-white p-8 rounded-lg shadow-md w-96">
         <Typography variant="h4" className="text-center mb-6 !text-gray-600">
           Login
         </Typography>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Controller
-            name="username"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <TextField
-                {...field}
-                size="small"
-                label="Username"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-              />
-            )}
-          />
-          <Controller
-            name="password"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <TextField
-                {...field}
-                size="small"
-                type="password"
-                label="Password"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-              />
-            )}
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            className="mt-4 bg-gradient-to-r from-blue-500 to-purple-600"
-          >
-            Login
-          </Button>
-        </form>
+        <FormProvider {...methods}>
+          <form onSubmit={methods.handleSubmit(onSubmit)}>
+            <GUsernameField name="username" rules={UserRules.username} />
+            <GPasswordField name="password" rules={UserRules.password} />
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              className="!mt-8 bg-gradient-to-r from-blue-500 to-purple-600"
+            >
+              Login
+            </Button>
+          </form>
+        </FormProvider>
         <Box className="mt-4 text-center">
           <Link href="#" className="text-sm text-gray-600 hover:underline">
             Forgot Password?

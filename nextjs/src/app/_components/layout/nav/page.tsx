@@ -13,10 +13,8 @@ const NavPage = () => {
 
   React.useEffect(() => {
     const newValue = Cookies.get('client_access_token')
-    console.log('pathname', pathname)
-    console.log('newValue', newValue)
     setCookieValue(newValue)
-    return () => {}
+    return () => {} // cleanup
   }, [Cookies.get('client_access_token'), pathname])
 
   return (
@@ -45,6 +43,12 @@ const NavPage = () => {
               className="text-white font-medium hover:border-b hover:border-white"
             >
               {cookieValue ? 'Logout' : 'Login'}
+            </Link>
+            <Link
+              href="/users/update"
+              className="text-white font-medium hover:border-b hover:border-white"
+            >
+              Update User
             </Link>
           </div>
         </div>

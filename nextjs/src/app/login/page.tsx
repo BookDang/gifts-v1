@@ -3,8 +3,7 @@
 import React from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { Button, Box, Typography, Link } from '@mui/material'
-import { useRouter } from 'next/navigation'
-import moment from 'moment'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Cookies from 'js-cookie'
 import LoginService from '@/services/login.service'
 import { TLogin } from '@/utilities/types/login.type'
@@ -15,6 +14,7 @@ import GPasswordField from '@/app/_components/user/form/GPasswordField'
 
 export default function LoginPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   const methods = useForm({
     defaultValues: {
@@ -42,10 +42,10 @@ export default function LoginPage() {
         const dateNow = response.data.dateNow
         const expires: number = dateNow + 180 * 1000
         Cookies.set('client_access_token', 'isLogined', {
-          expires,
+          expires: new Date(expires),
           sameSite: 'strict',
         })
-        router.push('/')
+        router.push(searchParams.get('redirect') || '/')
       } else {
         setSnackbar({
           open: true,
@@ -54,7 +54,6 @@ export default function LoginPage() {
         })
       }
     } catch (err: any) {
-      console.log('err', err)
       setSnackbar({
         open: true,
         message: err.response?.data?.message || 'Something went wrong',

@@ -1,4 +1,17 @@
-const UserRules = {
+export type TInputRules = {
+  [key: string]: {
+    [key: string]:
+      | number
+      | string
+      | RegExp
+      | {
+          value: number | RegExp | string
+          message: string
+        }
+  }
+}
+
+const UserRules: TInputRules = {
   username: {
     required: 'Username is required',
     minLength: {

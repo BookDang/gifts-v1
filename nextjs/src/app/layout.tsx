@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
 import NavPage from '@/app/_components/layout/nav/page'
+import { Suspense } from 'react'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -38,7 +39,9 @@ export default function RootLayout({
         <header>
           <NavPage />
         </header>
-        <main className="min-h-[calc(100vh_-_100px)]">{children}</main>
+        <main className="min-h-[calc(100vh_-_100px)]">
+          <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+        </main>
         <footer className="text-center text-gray-500 text-sm">
           &copy; {new Date().getFullYear()} Your Company Name. All rights
           reserved.

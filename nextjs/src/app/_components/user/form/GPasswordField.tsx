@@ -1,16 +1,20 @@
 'use client'
 
 import React from 'react'
+import { RegisterOptions, FieldValues } from 'react-hook-form'
 import { Controller, useFormContext } from 'react-hook-form'
 import { TextField, Tooltip } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
 
 interface GPasswordFieldProps {
   name: string
-  rules: Record<string, any>
+  rules?: Omit<
+    RegisterOptions<FieldValues, string>,
+    'disabled' | 'setValueAs' | 'valueAsNumber' | 'valueAsDate'
+  >
 }
 
-const GPasswordField: React.FC<GPasswordFieldProps> = ({ name, rules }) => {
+const GPasswordField = ({ name, rules }: GPasswordFieldProps) => {
   const { control } = useFormContext()
 
   return (

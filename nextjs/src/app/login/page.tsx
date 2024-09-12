@@ -11,6 +11,7 @@ import GSnackbar from '@/app/_components/common/GSnackbar'
 import UserRules from '@/utilities/rules/user.rule'
 import GUsernameField from '@/app/_components/user/form/GUsernameField'
 import GPasswordField from '@/app/_components/user/form/GPasswordField'
+import { AxiosError } from 'axios'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -53,10 +54,11 @@ export default function LoginPage() {
           severity: 'error',
         })
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const error = err as AxiosError<{ message: string }>
       setSnackbar({
         open: true,
-        message: err.response?.data?.message || 'Something went wrong',
+        message: error.response?.data?.message || 'Something went wrong',
         severity: 'error',
       })
     }
@@ -97,7 +99,7 @@ export default function LoginPage() {
         </Box>
         <Box className="mt-2 text-center">
           <Typography variant="body2" className="text-gray-600">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link href="/signup" className="text-blue-500 hover:underline">
               Sign up
             </Link>

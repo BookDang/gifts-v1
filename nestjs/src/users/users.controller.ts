@@ -14,6 +14,7 @@ import { UsersService } from './users.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { TResponse } from 'utilities/types/responses.type'
+import { UserDocument } from '@/users/schemas/user.schema'
 
 @Controller('users')
 export class UsersController {
@@ -23,7 +24,7 @@ export class UsersController {
   async create(
     @Body() createUserDto: CreateUserDto,
     @Res() res: Response,
-  ): Promise<Response<TResponse<any>>> {
+  ): Promise<Response<TResponse<UserDocument>>> {
     const response = await this.usersService.create(createUserDto)
     res.status(response.status)
     return res.json({

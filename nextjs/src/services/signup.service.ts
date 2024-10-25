@@ -1,10 +1,10 @@
-import axios, { AxiosResponse } from 'axios'
+import axios, { AxiosError, AxiosResponse } from 'axios'
 import { TUser } from '@/utilities/types/user.type'
 
 interface ISignupResponse {
   message: string
   status: number
-  data: any
+  data: TUser
 }
 
 class SignupService {
@@ -18,7 +18,8 @@ class SignupService {
       )
       return response
     } catch (error) {
-      throw error
+      const axiosError = error as AxiosError<{ message: string }>
+      throw axiosError
     }
   }
 }

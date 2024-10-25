@@ -1,13 +1,21 @@
 'use client'
 
 import React from 'react'
-import { Controller, useFormContext } from 'react-hook-form'
+import {
+  Controller,
+  FieldValues,
+  RegisterOptions,
+  useFormContext,
+} from 'react-hook-form'
 import { TextField, Tooltip } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
 
 interface GUsernameFieldProps {
   name: string
-  rules: Record<string, any>
+  rules: Omit<
+    RegisterOptions<FieldValues, string>,
+    'disabled' | 'setValueAs' | 'valueAsNumber' | 'valueAsDate'
+  >
 }
 
 const GUsernameField: React.FC<GUsernameFieldProps> = ({ name, rules }) => {

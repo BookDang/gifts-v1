@@ -14,7 +14,9 @@ export class UsersService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<TResponse<any>> {
+  async create(createUserDto: CreateUserDto): Promise<
+    TResponse<UserDocument>
+  > {
     try {
       let filter: any = {}
       if (createUserDto.email) {
@@ -32,7 +34,9 @@ export class UsersService {
       } else if (filter.email) {
         existingUser = await this.userModel.findOne({ email: filter.email })
       } else if (filter.username) {
-        existingUser = await this.userModel.findOne({ username: filter.username })
+        existingUser = await this.userModel.findOne({
+          username: filter.username,
+        })
       }
 
       if (existingUser) {

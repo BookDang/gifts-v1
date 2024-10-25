@@ -18,11 +18,26 @@ services:
       MONGO_INITDB_DATABASE: giftsdb_v1
       # docker exec -it gifts-mongodb mongo -u root -p giftsmongodb --authenticationDatabase admin
 
+  # Add MySQL service
+  mysql:
+    container_name: gifts-v1_mysql
+    image: mysql:8.4.3
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: giftsdb_v1
+      MYSQL_USER: giftsuser
+      MYSQL_PASSWORD: giftspassword
+    ports:
+      - "3306:3306"
+    networks:
+      - gifts-backend
+    volumes:
+      - mysql-data:/var/lib/mysql
+
   nextjs:
     container_name: gifts-v1_nextjs
     build:
       context: .
-      # Path to the Dockerfile inside .docker/next directory
       dockerfile: .docker/next/Dockerfile
     ports:
       - 3002:3002
@@ -35,8 +50,8 @@ services:
 
     depends_on:
       - mongodb
+      - mysql
 
-  # Add more services here
   # Create new service for nestjs based on Dockerfile in .docker/nest directory
   nestjs:
     container_name: gifts-v1_nestjs
@@ -52,6 +67,7 @@ services:
       - gifts-backend
     depends_on:
       - mongodb
+      - mysql
 
   # Add Nginx service
   nginx:
@@ -77,6 +93,7 @@ networks:
   gifts-backend:
     driver: bridge
 
-# Add volumes for MongoDB data
+# Add volumes for MongoDB and MySQL data
 volumes:
   mongodb-data:
+  mysql-data:

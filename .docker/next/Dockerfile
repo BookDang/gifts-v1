@@ -12,6 +12,6 @@ COPY ../../nextjs .
 
 RUN npm run build
 
-EXPOSE 3002
+EXPOSE 3007
 
 CMD ["npm", "run", "dev"]

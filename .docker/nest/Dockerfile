@@ -22,8 +22,8 @@ COPY ../../nestjs .
 # Build the app
 RUN npm run build
 
-# Expose the port 3003
-EXPOSE 3003
+# Expose the port 3008
+EXPOSE 3008
 
 # Start the app
 CMD ["npm", "run", "start:dev"]

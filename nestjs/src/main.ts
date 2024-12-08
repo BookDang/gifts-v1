@@ -8,6 +8,6 @@ async function bootstrap() {
   useContainer(app.select(AppModule), { fallbackOnErrors: true })
   app.useGlobalPipes(new ValidationPipe())
   app.setGlobalPrefix('api')
-  await app.listen(3003)
+  await app.listen(3008)
 }
 bootstrap()

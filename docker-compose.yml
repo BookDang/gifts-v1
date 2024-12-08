@@ -40,7 +40,7 @@ services:
       context: .
       dockerfile: .docker/next/Dockerfile
     ports:
-      - 3007:3002
+      - 3007:3007
     volumes:
       - ./nextjs:/app
       - /app/node_modules
@@ -59,7 +59,7 @@ services:
       context: .
       dockerfile: .docker/nest/Dockerfile
     ports:
-      - 3008:3003
+      - 3008:3008
     volumes:
       - ./nestjs:/app
       - /app/node_modules

@@ -1,4 +1,3 @@
-import e from 'express'
 import { DataSource, DataSourceOptions } from 'typeorm'
 
 export const dataSourceOptions: DataSourceOptions = {

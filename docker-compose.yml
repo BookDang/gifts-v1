@@ -28,7 +28,7 @@ services:
       MYSQL_USER: giftsuser
       MYSQL_PASSWORD: giftspassword
     ports:
-      - "3306:3306"
+      - "3309:3306"
     networks:
       - gifts-backend
     volumes:
@@ -40,7 +40,7 @@ services:
       context: .
       dockerfile: .docker/next/Dockerfile
     ports:
-      - 3002:3002
+      - 3007:3002
     volumes:
       - ./nextjs:/app
       - /app/node_modules
@@ -59,7 +59,7 @@ services:
       context: .
       dockerfile: .docker/nest/Dockerfile
     ports:
-      - 3003:3003
+      - 3008:3003
     volumes:
       - ./nestjs:/app
       - /app/node_modules
@@ -78,7 +78,7 @@ services:
     volumes:
       - .docker/nginx/nginx.conf:/etc/nginx/nginx.conf
     ports:
-      - 80:80
+      - 89:80
     depends_on:
       - nextjs
       - nestjs

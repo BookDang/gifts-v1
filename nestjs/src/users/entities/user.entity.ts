@@ -6,9 +6,10 @@ import {
   IsString,
   Length,
 } from 'class-validator'
-import { Column, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 import { Roles } from '@/enums/roles'
 
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
   id: number
@@ -42,7 +43,7 @@ export class User {
   @IsEmpty()
   @Length(10, 15)
   @IsString()
-  guardian_phone_number
+  guardian_phone_number: string
 
   @Column({
     type: 'enum',
@@ -64,5 +65,4 @@ export class User {
 
   @Column({ default: () => null })
   deleted_at: Date
-
 }

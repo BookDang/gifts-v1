@@ -54,15 +54,15 @@ export class User {
   @IsEnum(Roles)
   role: Roles
 
-  @Column({ default: true })
+  @Column({ type: 'boolean', default: () => '1' })
   is_active: boolean
 
-  @Column({ default: () => new Date() })
+  @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date
 
-  @Column({ default: () => new Date() })
+  @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
   updated_at: Date
 
-  @Column({ default: () => null })
+  @Column('datetime', { nullable: true })
   deleted_at: Date
 }

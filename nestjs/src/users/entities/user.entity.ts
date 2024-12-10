@@ -1,13 +1,5 @@
-import {
-  IsEmail,
-  IsEmpty,
-  IsEnum,
-  IsNotEmpty,
-  IsString,
-  Length,
-} from 'class-validator'
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
-import { Roles } from '@/enums/roles'
+import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm'
+import { Gender, Roles } from '@/enums/user.roles'
 
 @Entity('users')
 export class User {
@@ -15,18 +7,17 @@ export class User {
   id: number
 
   @Column({ length: 100 })
-  @IsNotEmpty()
-  @Length(1, 100)
-  @IsString()
+  @Index()
   fullname: string
+
+  @Column({ type: 'enum', enum: Gender, default: Gender.MELE})
+  gender: Gender
 
   @Column({
     length: 150,
     unique: true,
     nullable: true,
   })
-  @IsEmail()
-  @IsEmpty()
   email: string
 
   @Column({
@@ -34,15 +25,9 @@ export class User {
     unique: true,
     nullable: true,
   })
-  @IsEmpty()
-  @Length(10, 15)
-  @IsString()
   phone_number: string
 
   @Column({ length: 15, nullable: true })
-  @IsEmpty()
-  @Length(10, 15)
-  @IsString()
   guardian_phone_number: string
 
   @Column({
@@ -50,8 +35,6 @@ export class User {
     enum: Roles,
     default: Roles.STUDENT,
   })
-  @IsNotEmpty()
-  @IsEnum(Roles)
   role: Roles
 
   @Column({ type: 'boolean', default: () => '1' })

@@ -1,15 +1,36 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Res,
+  HttpStatus,
+} from '@nestjs/common'
+import { Response } from 'express'
+import { UsersService } from '@/users/users.service'
+import { CreateUserDto } from '@/users/dto/create-user.dto'
+import { responseError } from '@/utilities/response'
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  createNewUser(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.createNewUser(createUserDto);
+  async createNewUser(
+    @Body() createUserDto: CreateUserDto,
+    @Res() res: Response,
+  ) {
+    try {
+      const user = await this.usersService.createNewUser(createUserDto)
+      res.status(HttpStatus.CREATED).jsonp({
+        data: user,
+        statusCode: HttpStatus.CREATED,
+      })
+    } catch (error) {
+      responseError(res, error)
+    }
   }
 
   // @Get()

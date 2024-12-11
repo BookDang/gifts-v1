@@ -4,6 +4,7 @@ import {
   IsEmpty,
   IsEnum,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Length,
 } from 'class-validator'
@@ -18,17 +19,17 @@ export class CreateUserDto {
   @IsNotEmpty()
   gender: Gender
 
-  @IsEmpty()
+  @IsOptional()
   @IsEmail()
   email: string
 
-  @IsEmpty()
+  @IsOptional()
   @Length(10, 15)
   phone_number: string
 
-  @IsEmpty()
+  @IsOptional()
   @Length(10, 15)
-  gruardian_phone_number: string
+  guardian_phone_number: string
 
   @IsNotEmpty()
   @IsEnum(Roles)

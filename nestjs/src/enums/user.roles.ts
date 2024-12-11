@@ -1,7 +1,7 @@
 export enum Roles {
-  ADMIN = 'admin',
-  TEACHER = 'teacher',
-  STUDENT = 'student'
+  ADMIN = 'Admin',
+  TEACHER = 'Teacher',
+  STUDENT = 'Student'
 }
 
 export enum Gender {

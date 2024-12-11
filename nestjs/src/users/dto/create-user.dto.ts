@@ -7,7 +7,10 @@ import {
   IsOptional,
   IsString,
   Length,
+  Max,
+  Min,
 } from 'class-validator'
+import { IsNull } from 'typeorm'
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -25,11 +28,11 @@ export class CreateUserDto {
 
   @IsOptional()
   @Length(10, 15)
-  phone_number: string
+  phone_number?: string
 
   @IsOptional()
   @Length(10, 15)
-  guardian_phone_number: string
+  guardian_phone_number?: string
 
   @IsNotEmpty()
   @IsEnum(Roles)

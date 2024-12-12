@@ -46,6 +46,25 @@ export class UsersController {
     }
   }
 
+  @Delete(':id')
+  async deleteUserById(@Param('id') id: string, @Res() res: Response) {
+    try {
+      const result = await this.usersService.deleteUserById(+id)
+      if (!result) {
+        throw new Error('404')
+      }
+      res.status(HttpStatus.OK).jsonp({
+        data:  {
+          message: 'User deleted successfully',
+          userId: +id
+        },
+        statusCode: HttpStatus.OK,
+      })
+    } catch (error) {
+      responseError(res, error)
+    }
+  }
+
   // @Get()
   // findAll() {
   //   return this.usersService.findAll();

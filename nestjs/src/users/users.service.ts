@@ -32,4 +32,14 @@ export class UsersService {
       throw new Error(error.message)
     }
   }
+
+  async deleteUserById(id: number): Promise<boolean | Error> {
+    try {
+      const notRowEffected = 0
+      const rowAffected = await this.usersRepository.update(id, { deleted_at: new Date() })
+      return rowAffected.affected > notRowEffected
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
 }

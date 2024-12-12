@@ -33,6 +33,19 @@ export class UsersController {
     }
   }
 
+  @Get('all-active-users')
+  async findAllUsers(@Res() res: Response) {
+    try {
+      const allActiveUsers = await this.usersService.findAllActiveUsers()
+      res.status(HttpStatus.OK).jsonp({
+        data: allActiveUsers,
+        statusCode: HttpStatus.OK,
+      })
+    } catch (error) {
+      responseError(res, error)
+    }
+  }
+
   // @Get()
   // findAll() {
   //   return this.usersService.findAll();

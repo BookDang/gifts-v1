@@ -24,4 +24,12 @@ export class UsersService {
       throw new Error(error.message)
     }
   }
+
+  async findAllActiveUsers(): Promise<Omit<UserEntity, 'deleted_at'>[] | Error> {
+    try {
+      return await this.usersRepository.find({ where: { deleted_at: null } })
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
 }

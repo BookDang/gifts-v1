@@ -11,6 +11,8 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        gift_red: "var(--gift-red)",
+        gift_blue: "var(--gift-blue)",
       },
     },
   },

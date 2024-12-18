@@ -1,7 +1,7 @@
 import LeftMenu from "@/app/dashboard/_components/left-menu/LeftMenu"
 
-export default function DashboardLayout({
-  children,
+export default async function DashboardLayout({
+  children
 }: Readonly<{
   children: React.ReactNode
 }>) {
@@ -10,7 +10,7 @@ export default function DashboardLayout({
       <div className="flex">
         <LeftMenu />
         <main className="bg-[#f0f0f099] w-full h-screen overflow-hidden p-4">
-          <h1>Dashboard</h1>
+          {children}
         </main>
       </div>
     </div>

@@ -6,7 +6,11 @@
   --background: #ffffff;
   --foreground: #171717;
   --gift-red: #ef5261;
+  --gift-red-light: #fc5d6d;
+  --gift-red-lighter: #fec1c1;
+  --gift-red-lightest: #fce5e5;
   --gift-blue: #00c1e4;
+  --gift-drak-light: #424242;
 }
 
 @media (prefers-color-scheme: dark) {

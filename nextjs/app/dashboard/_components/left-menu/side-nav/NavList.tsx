@@ -12,7 +12,6 @@ type NavListProps = {
 
 const NavList: React.FC<NavListProps> = ({ ...props }) => {
   const pathname = usePathname()
-  console.log(pathname)
 
   return (
     <div className="grow">
@@ -42,20 +41,23 @@ const NavList: React.FC<NavListProps> = ({ ...props }) => {
             </li>
           ))}
         </ul>
-        <div className="border-t border-t-cyan-500 border-solid pt-2">
+        <div className="border-t border-t-cyan-500 border-solid">
           <Link
             href="/dashboard"
-            className="text-[#797979] flex py-2 gap-x-2 items-center justify-between
-              hover:bg-gift_blue hover:text-[#FFFFFF] hover:rounded-md"
+            className={`text-[#797979] flex py-2 px-2 gap-x-2 items-center justify-between
+                    hover:text-gift_blue
+                    overflow-hidden`}
           >
             <span
-              className={`transition-all duration-300 ${
+              className={`transition-width duration-300 ${
                 props.isLeftMenuOpen ? 'w-full' : 'w-0'
               } overflow-hidden`}
             >
               Logout
             </span>
-            <IoIosLogOut className="w-6 h-6" />
+            <span>
+              <IoIosLogOut className="w-6 h-6" />
+            </span>
           </Link>
         </div>
       </nav>

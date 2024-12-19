@@ -1,5 +1,6 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { Gender, Roles } from '@/enums/user.roles'
+import { UserPoint } from '@/users/entities/user_point.entity'
 
 @Entity('users')
 export class User {
@@ -33,7 +34,7 @@ export class User {
   @Column({
     type: 'enum',
     enum: Roles,
-    default: Roles.STUDENT,
+    default: Roles.USER,
   })
   role: Roles
 
@@ -48,4 +49,7 @@ export class User {
 
   @Column('datetime', { nullable: true })
   deleted_at: Date
+  
+  @OneToMany(() => UserPoint, (userPoint) => userPoint.user)
+  userPoints: UserPoint[]
 }

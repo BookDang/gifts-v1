@@ -7,6 +7,8 @@ import Table from '@/app/_components/table/Table'
 import Modal from '@/app/_components/modal/Modal'
 
 const Users: React.FC = () => {
+  console.log('Users: During render!');
+  
   const [openUserFormModal, setOpenUserFormModal] = React.useState<boolean>(false)
 
   const handleEdit = () => {
@@ -57,10 +59,6 @@ const Users: React.FC = () => {
       },
     })),
   )
-
-  React.useEffect(() => {
-    console.log('Open user form modal:', openUserFormModal)
-  }, [openUserFormModal])
 
   return (
     <MainContent title="Users" className="relative">

@@ -10,6 +10,8 @@ type TableProps = {
 }
 
 const Table: React.FC<TableProps> = (props) => {
+  console.log('Table: During render!')
+  
   return (
     <table className={`${props.classNameTable || ''}`}>
       <TableHeadRow columns={props.columns} />
@@ -18,7 +20,7 @@ const Table: React.FC<TableProps> = (props) => {
           ? renderLoadingRow(props.columns.length)
           : props.data.length === 0
           ? renderTableNoData(props.columns.length)
-          : renderTableRows(props.data, props.columns)}
+          : renderTableRows(props.data as TableRowType[], props.columns)}
       </tbody>
     </table>
   )

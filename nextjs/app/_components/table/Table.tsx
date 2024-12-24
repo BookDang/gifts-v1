@@ -35,6 +35,7 @@ const Table: React.FC<TableProps> = (props) => {
     )
   }
 
+  // It is need to optimize this function
   function renderTableNoData() {
     return (
       <tr>
@@ -48,6 +49,7 @@ const Table: React.FC<TableProps> = (props) => {
     )
   }
 
+  // It is need to optimize this function
   function renderTableRows(): React.ReactNode {
     return props.data?.map((item, rowIndex) => (
       <TableRow

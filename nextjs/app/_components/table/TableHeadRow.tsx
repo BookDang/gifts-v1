@@ -12,7 +12,9 @@ const TableHeadRow: React.FC<TableHeadRowProps> = (props) => {
         {props.columns.map((column, index) => (
           <th
             key={index}
-            className={`border border-white py-1 font-medium bg-gift_red text-white`}
+            className={`border border-white py-1 font-medium bg-gift_red text-white ${
+              column.styles || ''
+            }`}
           >
             <span>{column.title}</span>
           </th>
